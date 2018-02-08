@@ -68,8 +68,12 @@ class Menu(Loop):
                             menu_id = 3
                         if menu_id > -1:
                             menu_id -= 1
-                    if event.key == pygame.K_RETURN and menu_id == 0:
-                        Level(game)
+                    if event.key == pygame.K_RETURN:
+                        if menu_id == 0:
+                            Level(game)
+                        elif menu_id == 2:
+                            from loops.settings import Settings
+                            Settings(game)
 
             if title:
                 game.params.gameDisplay.blit(game.static.title_1, (0, 0))

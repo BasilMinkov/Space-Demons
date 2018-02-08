@@ -2,7 +2,8 @@ import random
 import pygame
 
 from loops import Loop
-from static_variables import DISPLAY_HIGHT, DISPLAY_WIDTH
+from inlets.lsl_inlet import LSLInlet
+from static_variables import DISPLAY_HIGHT, DISPLAY_WIDTH, WHITE
 
 
 class Level(Loop):
@@ -40,6 +41,10 @@ class Level(Loop):
 
         pygame.mixer.Sound.play(game.static.soundtrack, loops=-1)
 
+        if game.params.control == "BCI":
+            lsl = LSLInlet(name='NFBLab_data')
+            state = 0
+
         while not gameExit:
 
             game.params.clock.tick(60)  # frames per second
@@ -48,20 +53,27 @@ class Level(Loop):
             if parallax >= backgroundImgHight:
                 parallax = 0
 
-            for event in pygame.event.get():  # list of events per t
-
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        quit()
-                    if event.key == pygame.K_LEFT:
-                        x_change = -20
-                    if event.key == pygame.K_RIGHT:
-                        x_change = 20
-
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                        x_change = 0
+            if game.params.control == "Keyboard":
+                for event in pygame.event.get():  # list of events per t
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            pygame.quit()
+                            quit()
+                        if event.key == pygame.K_LEFT:
+                            x_change = -20
+                        if event.key == pygame.K_RIGHT:
+                            x_change = 20
+                    if event.type == pygame.KEYUP:
+                        if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                            x_change = 0
+            if game.params.control == "BCI":
+                chunk = lsl.get_next_chunk()
+                if chunk is not None:
+                    state = chunk[-1, 0]
+                if state == 1:
+                    x_change = -4
+                elif state == 2:
+                    x_change = 4
 
             x += x_change
 
@@ -152,7 +164,7 @@ class Level(Loop):
 
     def demons_dodged(self, count, distance):
         font = pygame.font.Font('/Users/basilminkov/Library/Fonts/9921.otf', 25)
-        text = font.render('Scores: {}, Distance: {} km'.format(str(count), str(distance)), True, (250, 0, 0))
+        text = font.render('Scores: {}, Distance: {} km'.format(str(count), str(distance)), True, WHITE)
         self.game.params.gameDisplay.blit(text, (5, 0))
 
     def crash(self, img1, img2, bg, c, x, y):
@@ -168,4 +180,4 @@ class Level(Loop):
         # pygame.display.update()
         # pygame.time.wait(1200)
         # gameDisplay.blit(bg, (0, 0 + c))
-        Level()
+        Level(self.game)

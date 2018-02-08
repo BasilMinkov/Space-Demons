@@ -2,8 +2,9 @@
 
 ## Abstract
 
-***Space Demons*** is the brain computer interface game, controlled
-by human [*sensorimotor rhythm*](https://www.sciencedirect.com/science/article/pii/001346949390114B?via%3Dihub) [1].
+***Space Demons*** is the brain-computer interface game (BCI), controlled
+by [*human sensorimotor rhythm (SMR)*](https://www.sciencedirect.com/science/article/pii/001346949390114B?via%3Dihub) [1]
+via [*lab streaming layer (LSL)*](https://www.neurobs.com/pres_docs/html/03_presentation/06_hardware_interfacing/02_lab_streaming_layer.htm).
 
 ## References
 

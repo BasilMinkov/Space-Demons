@@ -1,5 +1,8 @@
 import pygame
 
+from static_variables import DISPLAY_WIDTH, DISPLAY_HIGHT
+
+
 class Loop:
 
     def __init__(self, game):
@@ -16,6 +19,6 @@ class Loop:
     def message_display(self, text):
         """ Makes a text message in the center of a screen """
         largeText = pygame.font.Font('/Users/basilminkov/Library/Fonts/9921.otf', 90)
-        TextSurf, TextRect = text_object(text, largeText)
+        TextSurf, TextRect = self.text_object(text, largeText)
         TextRect.center = ((DISPLAY_WIDTH / 2), (DISPLAY_HIGHT / 2))
-        game.params.gameDisplay.blit(TextSurf, TextRect)
+        self.game.params.gameDisplay.blit(TextSurf, TextRect)

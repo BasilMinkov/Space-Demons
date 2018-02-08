@@ -20,3 +20,4 @@ class Parameters:
         random.seed(time.time() * 1000)
 
         self.running = True
+        self.control = "Keyboard"
