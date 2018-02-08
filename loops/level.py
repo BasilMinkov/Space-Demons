@@ -2,12 +2,14 @@ import random
 import pygame
 
 from loops import Loop
+from static_variables import DISPLAY_HIGHT, DISPLAY_WIDTH
+
 
 class Level(Loop):
 
-    def __init__(self):
+    def __init__(self, game):
 
-        super().__init__()
+        super().__init__(game)
 
         backgroundImgHight = game.static.backgroundImg.get_rect().size[1]
 
@@ -71,20 +73,20 @@ class Level(Loop):
             if counter > 10:
                 counter = 0
 
-            ring(coin_startX, coin_startY, coin_size, coin)
+            self.ring(coin_startX, coin_startY, coin_size, coin)
             coin_startY += coin_speed + boost
             distance += 1 + boost
-            demons_dodged(score, distance)
+            self.demons_dodged(score, distance)
 
             if counter > 5:
-                spacecraft(game.static.spacecraftImg, x, y)
+                self.spacecraft(game.static.spacecraftImg, x, y)
             else:
-                spacecraft(game.static.spacecraft2Img, x, y)
+                self.spacecraft(game.static.spacecraft2Img, x, y)
 
             if x > DISPLAY_WIDTH - game.static.spacecraft_size[0] or x < 0:
                 pygame.mixer.Sound.stop(game.static.soundtrack)
                 pygame.mixer.Sound.play(game.static.returns)
-                crash(game.static.explosion_1, game.static.explosion_2, game.static.backgroundImg, parallax, x, y)
+                self.crash(game.static.explosion_1, game.static.explosion_2, game.static.backgroundImg, parallax, x, y)
 
             if coin_startY > DISPLAY_HIGHT:
                 coin_startY = -coin_size
@@ -140,3 +142,30 @@ class Level(Loop):
                 boost = 30
 
             pygame.display.update()  # .flip()
+
+    def spacecraft(self, img, x, y):
+        self.game.params.gameDisplay.blit(img, (x, y))
+
+    def ring(self, coinX, coinY, coin_size, img):
+        img = pygame.transform.scale(img, (coin_size, coin_size))
+        self.game.params.gameDisplay.blit(img, (coinX, coinY))
+
+    def demons_dodged(self, count, distance):
+        font = pygame.font.Font('/Users/basilminkov/Library/Fonts/9921.otf', 25)
+        text = font.render('Scores: {}, Distance: {} km'.format(str(count), str(distance)), True, (250, 0, 0))
+        self.game.params.gameDisplay.blit(text, (5, 0))
+
+    def crash(self, img1, img2, bg, c, x, y):
+        for i in range(1):
+            self.message_display('GAME OVER!')
+            self.game.params.gameDisplay.blit(img1, (x, y))
+            pygame.display.update()
+
+        pygame.time.wait(1000)
+        # gameDisplay.blit(bg, (0, 0 + c))
+        # gameDisplay.blit(img2, (x, y))
+        # message_display('GAME OVER!')
+        # pygame.display.update()
+        # pygame.time.wait(1200)
+        # gameDisplay.blit(bg, (0, 0 + c))
+        Level()

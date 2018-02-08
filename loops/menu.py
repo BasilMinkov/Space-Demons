@@ -1,6 +1,5 @@
 import pygame
 
-from main import game
 from static_variables import DISPLAY_HIGHT
 from loops import Loop
 from loops.level import Level
@@ -9,9 +8,9 @@ from system.loader import Loader
 
 class Menu(Loop):
 
-    def __init__(self):
+    def __init__(self, game):
 
-        super().__init__()
+        super().__init__(game)
 
         intro = True
         title = True
@@ -70,7 +69,7 @@ class Menu(Loop):
                         if menu_id > -1:
                             menu_id -= 1
                     if event.key == pygame.K_RETURN and menu_id == 0:
-                        Level()
+                        Level(game)
 
             if title:
                 game.params.gameDisplay.blit(game.static.title_1, (0, 0))

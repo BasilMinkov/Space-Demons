@@ -11,6 +11,10 @@ class Game:
         # Load static objects (images, sounds)
         self.static = Loader()
 
-    @staticmethod
-    def run():
-        Menu()
+    def run(self):
+        Menu(self)
+
+
+if __name__ == "__main__":
+    game = Game()
+    game.run()
